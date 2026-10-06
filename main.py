@@ -27,7 +27,7 @@ def build_matrix(x, y) -> list:
     Maybe test 1024x1024, 32x32, 128x128?
     Source: https://en.wikipedia.org/wiki/Strassen_algorithm#Algorithm
     """
-
+    matrix = np.random.rand(x, y)
     return matrix
 
 
