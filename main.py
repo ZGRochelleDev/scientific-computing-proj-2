@@ -44,16 +44,15 @@ def standard_method(mat_a, mat_b) -> np.ndarray:
     rows_a, cols_a = mat_a.shape
     rows_b, cols_b = mat_b.shape
     # Check that the cols of A = rows of B
-    if cols_a != rows_b:
-        raise ValueError("Columns of mat_a must match Rows of mat_b.")
+    assert cols_a == rows_b, "Columns of mat_a must match Rows of mat_b."
     # Initializing the result matrix with the correct dimensions
-    result = np.zeros((rows_a, cols_b))
+    mat_c = np.zeros((cols_b, rows_a))
     # standard matrix multiplication using 3 loops
     for i in range(rows_a):
         for j in range(cols_b):
             for k in range(cols_a):
-                result[i][j] += mat_a[i][k] * mat_b[k][j]
-    return result
+                mat_c[i][j] += mat_a[i][k] * mat_b[k][j]
+    return mat_c
 
 
 ## Our Strassen's implementation is slow due to:
