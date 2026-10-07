@@ -43,8 +43,7 @@ def standard_method(mat_a, mat_b) -> None:
     rows_a, cols_a = mat_a.shape
     rows_b, cols_b = mat_b.shape
     # Check that the cols of A = rows of B
-    if cols_a != rows_b:
-        raise ValueError("Columns of mat_a must match Rows of mat_b.")
+    assert cols_a == rows_b, "Columns of mat_a must match Rows of mat_b."
     # Initializing the result matrix with the correct dimensions
     result = np.zeros((cols_b, rows_a))
     # standard matrix multiplication using 3 loops
@@ -80,7 +79,7 @@ if __name__ == '__main__':
     # Quick test using the identity matrix
     mtx_3 = [[1,0],[0,1]]
     mtx_4 = [[1,2],[3,4]]
-    print(standard_method(mtx_3, mtx_4))
+    print(standard_method(mtx_3, mtx_4)) 
     strassens_method(mtx_1)
 
 
