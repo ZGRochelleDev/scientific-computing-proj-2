@@ -25,7 +25,7 @@ def build_matrix(x, y) -> np.ndarray:
     """
     construct a matrix x * y
     We just need a matrix large enough to demonstrate strassen surpassing the std mathod.
-    Maybe test 1024x1024, 32x32, 128x128?
+    Maybe test 32x32, 128x128, 1024x1024?
     Source: https://en.wikipedia.org/wiki/Strassen_algorithm#Algorithm
     """
 
@@ -107,35 +107,63 @@ def strassens_method(mat_a: np.ndarray, mat_b: np.ndarray) -> np.ndarray:
     return np.block([[C_11, C_12], [C_21, C_22]])
 
 
-# def plot_data(mtx_1, mtx_2) -> None:
-#     plt.figure(Path(__file__).name, figsize=(12, 8))
-#     plt.subplot(121).plot(mtx_1)
-#     plt.subplot(122).plot(mtx_2)
-#     plt.show()    print(type(mtx_1))
+def plot_data(matrix_sizes: list, standard_times: list, strassen_times: list) -> None:
+    """
+    plot the execution times
+    """
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(matrix_sizes, standard_times, marker='o', linestyle='-', linewidth=2, label='Standard 3-Loop Method')
+    plt.plot(matrix_sizes, strassen_times, marker='s', linestyle='--', linewidth=2, label="Strassen's Method")
+    
+    plt.xlabel('Matrix Size (N x N)', fontsize=12)
+    plt.ylabel('Execution Time (seconds)', fontsize=12)
+    plt.title('Performance Comparison: Standard vs. Strassen Matrix Multiplication', fontsize=14)
+    plt.legend(fontsize=11)
+    plt.grid(True, linestyle=':', alpha=0.7)
+    plt.show()
+
+
+def run_benchmarks(matrix_sizes: list) -> tuple:
+    """
+    Runs execution time benchmarks for both the standard method 
+    and Strassen's method across a given list of matrix sizes.
+    """
+
+    standard_times = []
+    strassen_times = []
+
+    for size in matrix_sizes:
+        print(f"Testing matrix size: {size}x{size}...")
+        mtx_1 = build_matrix(size, size)
+        mtx_2 = build_matrix(size, size)
+
+        ## Standard Method
+        start_time = time.perf_counter()
+        standard_method(mtx_1, mtx_2)
+        duration = time.perf_counter() - start_time
+        standard_times.append(duration)
+        print(f" - Standard: {duration} seconds")
+
+        ## Strassen's Method
+        start_time = time.perf_counter()
+        strassens_method(mtx_1, mtx_2)
+        duration = time.perf_counter() - start_time
+        strassen_times.append(duration)
+        print(f" - Strassen: {duration} seconds")
+
+    return standard_times, strassen_times
 
 
 if __name__ == '__main__':
+    print("\nStarting...\n")
 
-    print("\nStarting...")
+    matrix_sizes = [16, 32, 64, 128]
+    
+    # benchmarking loop
+    standard_times, strassen_times = run_benchmarks(matrix_sizes)
 
-    mtx_1 = build_matrix(128, 128)
-    mtx_2 = build_matrix(128, 128)
-
-    # Quick test using the identity matrix
-    mtx_3 = [[1,0],[0,1]]
-    mtx_4 = [[1,2],[3,4]]
-    print(standard_method(mtx_3, mtx_4))
-    print(strassens_method(mtx_3, mtx_4))
-
-    ## benchmarking - Standard ##
-    start_time = time.perf_counter()
-    standard_method(mtx_1, mtx_2)
-    elapsed_time = time.perf_counter() - start_time
-    print(f"Time taken: {elapsed_time} seconds")
-
-    ## benchmarking - Strassen's ##
-    start_time = time.perf_counter()
-    strassens_method(mtx_1, mtx_2)
-    elapsed_time = time.perf_counter() - start_time
-    print(f"Time taken: {elapsed_time} seconds")
-
+    print("\nComplete")
+    
+    # Plot the 'execution time' by 'matrix size'
+    plot_data(matrix_sizes, standard_times, strassen_times)
