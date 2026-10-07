@@ -86,7 +86,7 @@ def strassens_method(mat_a: np.ndarray, mat_b: np.ndarray) -> np.ndarray:
     B_11, B_12 = mat_b[:mid, :mid], mat_b[:mid, mid:]
     B_21, B_22 = mat_b[mid:, :mid], mat_b[mid:, mid:]
 
-    ## 2. Conquer - 7 recursive calls using native matrices math
+    ## 2. Conquer - 7 recursive calls using native matrix math
     SM_1 = strassens_method(A_11 + A_22, B_11 + B_22)
     SM_2 = strassens_method(A_21 + A_22, B_11)
     SM_3 = strassens_method(A_11, B_12 - B_22)
