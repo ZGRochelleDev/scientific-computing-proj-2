@@ -27,17 +27,32 @@ def build_matrix(x, y) -> list:
     Maybe test 1024x1024, 32x32, 128x128?
     Source: https://en.wikipedia.org/wiki/Strassen_algorithm#Algorithm
     """
-
+    matrix = np.random.randint(0, 100, size=(x, y), dtype=np.int32)
     return matrix
 
 
-def standard_method(matrix: list) -> None:
+def standard_method(mat_a, mat_b) -> None:
     """
     implement standard matrix multiplication approach
     using 3 loops
     """
-
-    return
+    # Converting parameters to numpy arrays
+    mat_a = np.array(mat_a)
+    mat_b = np.array(mat_b)
+    # Getting dimensions of each array
+    rows_a, cols_a = mat_a.shape
+    rows_b, cols_b = mat_b.shape
+    # Check that the cols of A = rows of B
+    if cols_a != rows_b:
+        raise ValueError("Columns of mat_a must match Rows of mat_b.")
+    # Initializing the result matrix with the correct dimensions
+    result = np.zeros((cols_b, rows_a))
+    # standard matrix multiplication using 3 loops
+    for i in range(rows_a):
+        for j in range(cols_b):
+            for k in range(cols_a):
+                result[i][j] += mat_a[i][k] * mat_b[k][j]
+    return result
 
 
 def strassens_method(matrix: list) -> None:
@@ -59,9 +74,14 @@ if __name__ == '__main__':
 
     print("\nStarting...")
 
-    mtx = build_matrix(1024, 1024)
-    standard_method(mtx)
-    strassens_method(mtx)
+    mtx_1 = build_matrix(1024, 1024)
+    mtx_2 = build_matrix(1024, 1024)
+
+    # Quick test using the identity matrix
+    mtx_3 = [[1,0],[0,1]]
+    mtx_4 = [[1,2],[3,4]]
+    print(standard_method(mtx_3, mtx_4))
+    strassens_method(mtx_1)
 
 
     ## benchmarking ##
@@ -69,6 +89,7 @@ if __name__ == '__main__':
     """
     function goes here
     """
+    standard_method(mtx_1, mtx_2)
     elapsed_time = time.perf_counter() - start_time
     print(f"Time taken: {elapsed_time}")
 
